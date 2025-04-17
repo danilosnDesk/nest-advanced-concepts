@@ -1,10 +1,14 @@
 import {
   Controller,
   Get,
+  Param,
+  Patch,
   RequestTimeoutException,
   UseInterceptors,
 } from '@nestjs/common';
 import { CircuitBreakerInterceptor } from 'src/common/interceptors/circuit-breaker/circuit-breaker.interceptor';
+import { EntityExistsPipe } from 'src/common/pipes/entity-exists/entity-exists.pipe';
+import { CoffeeEntity } from './coffee.entity';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -25,5 +29,10 @@ export class CoffeesController {
         name: 'Coffee 2',
       },
     ];
+  }
+
+  @Patch(':id')
+  patchCoffee(@Param('id', EntityExistsPipe(CoffeeEntity)) id: string) {
+    return id;
   }
 }
